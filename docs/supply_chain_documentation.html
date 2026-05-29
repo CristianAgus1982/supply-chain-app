@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Supply Chain Planning System — Documentation</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; background:#f1f5f9; color:#1e293b; line-height:1.7; }
+  a { color:#3b82f6; }
+
+  /* ── Navigation ── */
+  nav { position:fixed; top:0; left:0; width:240px; height:100vh; background:#0f172a;
+        overflow-y:auto; padding:24px 0; z-index:100; }
+  nav .logo { padding:0 20px 24px; border-bottom:1px solid #1e293b; margin-bottom:16px; }
+  nav .logo h2 { color:white; font-size:.95em; font-weight:700; }
+  nav .logo p  { color:#64748b; font-size:.75em; margin-top:4px; }
+  nav a { display:block; padding:8px 20px; color:#94a3b8; font-size:.82em;
+          text-decoration:none; transition:all .15s; border-left:3px solid transparent; }
+  nav a:hover { color:white; background:#1e293b; }
+  nav a.active { color:#93c5fd; border-left-color:#3b82f6; background:#1e293b; }
+  nav .section-label { padding:16px 20px 6px; color:#475569; font-size:.7em;
+                        text-transform:uppercase; letter-spacing:.06em; font-weight:600; }
+
+  /* ── Main ── */
+  main { margin-left:240px; padding:40px 48px; max-width:1100px; }
+
+  /* ── Cover ── */
+  .cover { background:linear-gradient(135deg,#0f172a 0%,#1e3a5f 60%,#2d6cdf 100%);
+           border-radius:16px; padding:56px 48px; margin-bottom:40px; text-align:center; }
+  .cover h1 { color:white; font-size:2.4em; font-weight:800; margin-bottom:10px; }
+  .cover p  { color:#93c5fd; font-size:1.1em; margin-bottom:28px; }
+  .cover .badges { display:flex; justify-content:center; gap:10px; flex-wrap:wrap; margin-bottom:32px; }
+  .cover .badge { background:rgba(255,255,255,.12); color:white; padding:5px 14px;
+                  border-radius:20px; font-size:.82em; }
+  .cover .stats { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; max-width:600px; margin:0 auto; }
+  .cover .stat { background:rgba(255,255,255,.08); padding:14px; border-radius:10px; }
+  .cover .stat .label { color:#93c5fd; font-size:.72em; text-transform:uppercase; letter-spacing:.05em; }
+  .cover .stat .value { color:white; font-size:1.6em; font-weight:700; margin-top:4px; }
+
+  /* ── Sections ── */
+  .section { margin-bottom:48px; scroll-margin-top:24px; }
+  .section-header { background:#0f172a; color:white; padding:12px 22px; border-radius:8px 8px 0 0;
+                    font-size:1em; font-weight:700; display:flex; align-items:center; gap:10px; }
+  .section-body { background:white; border:1px solid #e2e8f0; border-top:none;
+                  border-radius:0 0 12px 12px; padding:28px; }
+
+  /* ── Typography ── */
+  h3 { color:#0f172a; font-size:.95em; margin:20px 0 12px; }
+  h3:first-child { margin-top:0; }
+  p  { color:#475569; font-size:.88em; margin-bottom:12px; }
+  p:last-child { margin-bottom:0; }
+  code { background:#f1f5f9; color:#0f172a; padding:2px 6px; border-radius:4px; font-size:.85em; }
+
+  /* ── Cards grid ── */
+  .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:14px 0; }
+  .grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin:14px 0; }
+  .grid-4 { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin:14px 0; }
+  @media(max-width:900px) { .grid-4 { grid-template-columns:repeat(2,1fr); } }
+  @media(max-width:700px) { .grid-2,.grid-3,.grid-4 { grid-template-columns:1fr; } }
+
+  .card { background:white; border:1px solid #e2e8f0; border-radius:10px; padding:16px; }
+  .card.blue  { border-left:3px solid #3b82f6; }
+  .card.green { border-left:3px solid #10b981; }
+  .card.amber { border-left:3px solid #f59e0b; }
+  .card.purple{ border-left:3px solid #8b5cf6; }
+  .card.red   { border-left:3px solid #ef4444; }
+  .card.cyan  { border-left:3px solid #06b6d4; }
+  .card strong { display:block; font-size:.88em; margin-bottom:6px; }
+  .card p { font-size:.82em; margin:0; }
+
+  /* ── Tables ── */
+  table { width:100%; border-collapse:collapse; font-size:.83em; margin:14px 0; }
+  thead tr { background:#1e3a5f; color:white; }
+  thead th { padding:10px 14px; text-align:left; font-weight:600; }
+  tbody tr:nth-child(even) { background:#f8fafc; }
+  tbody td { padding:9px 14px; border-bottom:1px solid #f1f5f9; color:#475569; }
+  .method { display:inline-block; padding:2px 8px; border-radius:4px; font-size:.8em; font-weight:600; }
+  .get  { background:#dcfce7; color:#166534; }
+  .post { background:#dbeafe; color:#1e40af; }
+
+  /* ── Code blocks ── */
+  pre { background:#1e1e1e; border-radius:10px; padding:20px 24px; overflow-x:auto;
+        font-family:'Cascadia Code','Fira Code',monospace; font-size:.8em;
+        line-height:1.9; margin:14px 0; }
+  pre .green  { color:#a8ff78; }
+  pre .blue   { color:#93c5fd; }
+  pre .yellow { color:#fbbf24; }
+  pre .gray   { color:#6b7280; }
+  pre .white  { color:#e2e8f0; }
+
+  /* ── Alerts ── */
+  .alert { padding:13px 18px; border-radius:0 8px 8px 0; margin:14px 0; font-size:.85em; }
+  .alert.warning { background:#fff7ed; border-left:4px solid #f59e0b; }
+  .alert.warning strong { color:#92400e; }
+  .alert.warning p { color:#78350f; }
+  .alert.danger  { background:#fef2f2; border-left:4px solid #ef4444; }
+  .alert.danger strong { color:#991b1b; }
+  .alert.danger p { color:#7f1d1d; }
+
+  /* ── Flow steps ── */
+  .flow { display:flex; align-items:center; gap:0; margin:16px 0; flex-wrap:wrap; }
+  .flow-step { background:#3b82f6; color:white; padding:10px 16px; font-size:.8em;
+               font-weight:600; border-radius:8px; text-align:center; min-width:120px; }
+  .flow-step.green  { background:#10b981; }
+  .flow-step.purple { background:#8b5cf6; }
+  .flow-step.amber  { background:#f59e0b; }
+  .flow-step.red    { background:#ef4444; }
+  .flow-arrow { color:#94a3b8; font-size:1.2em; padding:0 8px; }
+
+  /* ── Decision cards ── */
+  .decision { background:white; border:1px solid #e2e8f0; border-radius:10px;
+              padding:16px 20px; margin-bottom:12px; display:flex; gap:14px; }
+  .decision .icon { font-size:1.4em; flex-shrink:0; }
+  .decision strong { display:block; color:#0f172a; margin-bottom:6px; font-size:.9em; }
+  .decision p { font-size:.83em; margin:0; }
+
+  /* ── Architecture diagram ── */
+  .arch { background:#1e1e1e; border-radius:10px; padding:24px; margin:14px 0; }
+  .arch-layer { border:1px solid #334155; border-radius:8px; padding:14px 18px; margin-bottom:10px; }
+  .arch-layer .layer-title { color:#fbbf24; font-size:.8em; font-weight:700;
+                              text-transform:uppercase; letter-spacing:.05em; margin-bottom:6px; }
+  .arch-layer .layer-desc  { color:#94a3b8; font-size:.78em; }
+  .arch-arrow { text-align:center; color:#4ade80; font-size:.8em; margin:4px 0; }
+
+  /* ── TOC ── */
+  .toc { background:white; border:1px solid #e2e8f0; border-radius:12px; padding:28px 32px; margin-bottom:36px; }
+  .toc h2 { color:#0f172a; font-size:1.05em; margin-bottom:18px; }
+  .toc .toc-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px 32px; }
+  .toc a { color:#475569; font-size:.88em; text-decoration:none; padding:3px 0; display:block; }
+  .toc a:hover { color:#3b82f6; }
+  .toc .toc-label { color:#64748b; font-size:.72em; text-transform:uppercase;
+                    font-weight:600; letter-spacing:.05em; margin:10px 0 6px; }
+
+  /* ── Footer ── */
+  footer { background:linear-gradient(135deg,#0f172a 0%,#1e3a5f 60%,#2d6cdf 100%);
+           border-radius:16px; padding:36px; text-align:center; margin-bottom:40px; }
+  footer h2 { color:white; font-size:1.3em; margin-bottom:8px; }
+  footer p  { color:#93c5fd; font-size:.88em; margin-bottom:20px; }
+  footer .tags { display:flex; justify-content:center; gap:20px; flex-wrap:wrap; color:#cbd5e1; font-size:.8em; }
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav>
+  <div class="logo">
+    <h2>🏭 Supply Chain</h2>
+    <p>Planning System Docs</p>
+  </div>
+  <div class="section-label">Overview</div>
+  <a href="#overview">1. Project Overview</a>
+  <a href="#architecture">2. Architecture</a>
+  <a href="#structure">3. Project Structure</a>
+  <a href="#installation">4. Installation</a>
+  <div class="section-label">Technical</div>
+  <a href="#data">5. Data Pipeline</a>
+  <a href="#ml">6. ML Model</a>
+  <a href="#api">7. FastAPI Backend</a>
+  <a href="#frontend">8. React Dashboard</a>
+  <a href="#decisions">9. Design Decisions</a>
+  <a href="#nextsteps">10. Next Steps</a>
+</nav>
+
+<!-- Main content -->
+<main>
+
+  <!-- Cover -->
+  <div class="cover">
+    <div style="font-size:3em;margin-bottom:14px;">🏭</div>
+    <h1>Supply Chain Planning System</h1>
+    <p>XGBoost Demand Forecasting · FastAPI · React Dashboard</p>
+    <div class="badges">
+      <span class="badge">🐍 Python 3.11</span>
+      <span class="badge">🌳 XGBoost</span>
+      <span class="badge">⚡ FastAPI</span>
+      <span class="badge">⚛️ React</span>
+      <span class="badge">🔍 SHAP</span>
+      <span class="badge">🏭 Manufacturing</span>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="label">Products</div><div class="value">10</div></div>
+      <div class="stat"><div class="label">Features</div><div class="value">70+</div></div>
+      <div class="stat"><div class="label">Endpoints</div><div class="value">7</div></div>
+      <div class="stat"><div class="label">Notebooks</div><div class="value">5</div></div>
+    </div>
+  </div>
+
+  <!-- TOC -->
+  <div class="toc">
+    <h2>📋 Table of Contents</h2>
+    <div class="toc-grid">
+      <div>
+        <div class="toc-label">Overview</div>
+        <a href="#overview">1. Project Overview & Objectives</a>
+        <a href="#architecture">2. System Architecture</a>
+        <a href="#structure">3. Project Structure</a>
+        <a href="#installation">4. Installation Guide</a>
+      </div>
+      <div>
+        <div class="toc-label">Technical</div>
+        <a href="#data">5. Data Pipeline</a>
+        <a href="#ml">6. ML Model & Validation</a>
+        <a href="#api">7. FastAPI Backend</a>
+        <a href="#frontend">8. React Dashboard</a>
+        <a href="#decisions">9. Key Design Decisions</a>
+        <a href="#nextsteps">10. Next Steps</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1. Overview -->
+  <div class="section" id="overview">
+    <div class="section-header">📌 1. Project Overview & Objectives</div>
+    <div class="section-body">
+      <p>This project implements a <strong>production-grade supply chain demand forecasting system</strong> for the manufacturing sector, inspired by enterprise platforms like RELEX Solutions. It combines machine learning, a REST API, and an interactive dashboard into a complete end-to-end pipeline.</p>
+
+      <h3>🎯 Business Objectives</h3>
+      <div class="grid-2">
+        <div class="card blue">
+          <strong style="color:#1e40af;">Demand Forecasting</strong>
+          <p>Predict weekly demand for 10 industrial SKUs one week ahead, enabling proactive production planning and inventory management.</p>
+        </div>
+        <div class="card green">
+          <strong style="color:#065f46;">Supply Risk Detection</strong>
+          <p>Automatically detect demand spikes, drops, and supplier reliability issues before they impact production continuity.</p>
+        </div>
+        <div class="card amber">
+          <strong style="color:#92400e;">Explainability</strong>
+          <p>Provide SHAP-based explanations so supply chain managers understand why the model made each prediction and can trust the output.</p>
+        </div>
+        <div class="card purple">
+          <strong style="color:#4c1d95;">Real-time Dashboard</strong>
+          <p>Interactive React dashboard connecting to the ML model via FastAPI, showing forecasts, alerts, and SHAP charts updated on demand.</p>
+        </div>
+      </div>
+
+      <h3>🏭 Sector & Scope</h3>
+      <p>The simulation covers a <strong>2-year period (104 weeks)</strong> with 10 industrial products across mechanical and electronic categories, 5 industrial clients (automotive, construction, energy, medical, aerospace), and 3 raw material suppliers from Germany, Taiwan, and Spain. All data is synthetic but designed to replicate real-world manufacturing demand patterns including seasonality, economic cycles, promotional events, and supply disruptions.</p>
+    </div>
+  </div>
+
+  <!-- 2. Architecture -->
+  <div class="section" id="architecture">
+    <div class="section-header">🏗️ 2. System Architecture</div>
+    <div class="section-body">
+      <p>The system follows a classic <strong>3-tier architecture</strong> with a data/ML layer, an API layer, and a presentation layer. Each tier is independent and communicates via well-defined interfaces.</p>
+
+      <div class="arch">
+        <div class="arch-layer">
+          <div class="arch-layer-title" style="color:#fbbf24;font-size:.8em;font-weight:700;text-transform:uppercase;margin-bottom:6px;">PRESENTATION LAYER</div>
+          <div class="arch-layer-desc" style="color:#94a3b8;font-size:.8em;">React + Vite · localhost:3000 · KPI Cards · Forecast Chart · Alerts · SHAP Panel</div>
+        </div>
+        <div class="arch-arrow" style="text-align:center;color:#4ade80;font-size:.82em;padding:4px 0;">↕ HTTP/JSON (fetch API)</div>
+        <div class="arch-layer">
+          <div class="arch-layer-title" style="color:#fbbf24;font-size:.8em;font-weight:700;text-transform:uppercase;margin-bottom:6px;">API LAYER</div>
+          <div class="arch-layer-desc" style="color:#94a3b8;font-size:.8em;">FastAPI + Uvicorn · localhost:8000 · /forecast · /alerts · /shap · /health</div>
+        </div>
+        <div class="arch-arrow" style="text-align:center;color:#4ade80;font-size:.82em;padding:4px 0;">↕ pickle / CSV</div>
+        <div class="arch-layer">
+          <div class="arch-layer-title" style="color:#fbbf24;font-size:.8em;font-weight:700;text-transform:uppercase;margin-bottom:6px;">DATA & ML LAYER</div>
+          <div class="arch-layer-desc" style="color:#94a3b8;font-size:.8em;">Synthetic data generation → Feature engineering → XGBoost · Walk-forward validation · SHAP explainer</div>
+        </div>
+      </div>
+
+      <h3>Data Flow</h3>
+      <div class="flow">
+        <div class="flow-step">Notebook 01<br><span style="font-weight:400;opacity:.8;font-size:.9em;">Raw CSVs</span></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step green">Notebook 02<br><span style="font-weight:400;opacity:.8;font-size:.9em;">ML Dataset</span></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step purple">Notebook 03<br><span style="font-weight:400;opacity:.8;font-size:.9em;">Model .pkl</span></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step amber">Notebook 04<br><span style="font-weight:400;opacity:.8;font-size:.9em;">FastAPI</span></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step red">Notebook 05<br><span style="font-weight:400;opacity:.8;font-size:.9em;">React UI</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Structure -->
+  <div class="section" id="structure">
+    <div class="section-header">📁 3. Project Structure</div>
+    <div class="section-body">
+      <pre><span class="yellow">supply-chain-app/</span>
+<span class="blue">├── notebooks/</span>              <span class="gray"># Jupyter notebooks (main workflow)</span>
+<span class="white">│   ├── 00_project_documentation.ipynb</span>
+<span class="white">│   ├── 01_data_generation.ipynb</span>     <span class="gray"># Synthetic data generator</span>
+<span class="white">│   ├── 02_feature_engineering.ipynb</span>  <span class="gray"># Lags, rolling stats, encoding</span>
+<span class="white">│   ├── 03_xgboost_training.ipynb</span>     <span class="gray"># Walk-forward validation + SHAP</span>
+<span class="white">│   ├── 04_fastapi_backend.ipynb</span>      <span class="gray"># API source files + testing</span>
+<span class="white">│   └── 05_react_dashboard.ipynb</span>      <span class="gray"># React components</span>
+<span class="blue">├── src/api/</span>                <span class="gray"># FastAPI backend</span>
+<span class="white">│   ├── main.py</span>             <span class="gray"># App entry point + CORS + lifespan</span>
+<span class="white">│   ├── models.py</span>           <span class="gray"># Pydantic request/response schemas</span>
+<span class="white">│   ├── routers/forecast.py</span> <span class="gray"># /forecast endpoints</span>
+<span class="white">│   ├── routers/alerts.py</span>   <span class="gray"># /alerts endpoints</span>
+<span class="white">│   └── services/predictor.py</span> <span class="gray"># ML inference service (singleton)</span>
+<span class="blue">├── frontend/src/</span>           <span class="gray"># React frontend</span>
+<span class="white">│   ├── App.jsx</span>             <span class="gray"># Root component + data fetching</span>
+<span class="white">│   ├── components/KPICards.jsx</span>
+<span class="white">│   ├── components/ForecastChart.jsx</span>
+<span class="white">│   ├── components/AlertsPanel.jsx</span>
+<span class="white">│   ├── components/ShapPanel.jsx</span>
+<span class="white">│   └── api/client.js</span>       <span class="gray"># FastAPI client functions</span>
+<span class="blue">├── data/</span>
+<span class="white">│   ├── raw/</span>                <span class="gray"># 6 CSVs from Notebook 01</span>
+<span class="white">│   └── processed/</span>          <span class="gray"># ml_dataset.csv + feature_list.json</span>
+<span class="blue">└── models/</span>
+<span class="white">    └── xgb_demand_model.pkl</span> <span class="gray"># Trained XGBoost model</span></pre>
+    </div>
+  </div>
+
+  <!-- 4. Installation -->
+  <div class="section" id="installation">
+    <div class="section-header">⚙️ 4. Installation Guide</div>
+    <div class="section-body">
+      <div class="alert warning">
+        <strong>Prerequisites</strong>
+        <p>Anaconda/Miniconda · Python 3.11 · Node.js 18+ LTS · VS Code</p>
+      </div>
+
+      <h3>Step 1 — Python environment</h3>
+      <pre><span class="green">conda create -n supply-chain python=3.11 -y
+conda activate supply-chain
+conda install -c conda-forge jupyter jupyterlab notebook -y
+pip install numpy pandas matplotlib seaborn scikit-learn xgboost lightgbm shap nbformat ipykernel
+pip install fastapi "uvicorn[standard]" httpx python-multipart
+python -m ipykernel install --user --name supply-chain --display-name "Supply Chain ML"</span></pre>
+
+      <h3>Step 2 — Run notebooks in order</h3>
+      <div class="alert warning">
+        <strong>Important — working directory</strong>
+        <p>Add this cell at the top of every notebook and run it first:</p>
+      </div>
+      <pre><span class="green">import os
+os.chdir(r"C:\path\to\supply-chain-app")
+print(os.getcwd())</span></pre>
+      <pre><span class="gray"># Run in order:</span>
+<span class="green">01_data_generation.ipynb      </span><span class="gray"># generates data/raw/*.csv</span>
+<span class="green">02_feature_engineering.ipynb  </span><span class="gray"># generates data/processed/ml_dataset.csv</span>
+<span class="green">03_xgboost_training.ipynb     </span><span class="gray"># generates models/xgb_demand_model.pkl</span>
+<span class="green">04_fastapi_backend.ipynb      </span><span class="gray"># generates src/api/ files</span>
+<span class="green">05_react_dashboard.ipynb      </span><span class="gray"># generates frontend/ files</span></pre>
+
+      <h3>Step 3 — Run the full stack</h3>
+      <pre><span class="gray"># Terminal 1 — FastAPI backend</span>
+<span class="green">conda activate supply-chain
+cd supply-chain-app
+$env:PYTHONPATH = "."
+python -m uvicorn src.api.main:app --port 8000</span>
+
+<span class="gray"># Terminal 2 — React dashboard</span>
+<span class="green">cd supply-chain-app/frontend
+npm run dev</span>
+
+<span class="gray"># Open in browser</span>
+<span class="blue">http://localhost:3000        </span><span class="gray"># Dashboard</span>
+<span class="blue">http://localhost:8000/docs  </span><span class="gray"># API Swagger UI</span></pre>
+    </div>
+  </div>
+
+  <!-- 5. Data Pipeline -->
+  <div class="section" id="data">
+    <div class="section-header">📦 5. Data Pipeline (Notebooks 01 & 02)</div>
+    <div class="section-body">
+      <h3>5.1 Synthetic Data Generation</h3>
+      <p>2 years of weekly data (104 weeks) across 5 variable groups. Each group is correlated with others to replicate real supply chain interdependencies.</p>
+
+      <table>
+        <thead><tr><th>Group</th><th>Dataset</th><th>Key variables</th><th>Design pattern</th></tr></thead>
+        <tbody>
+          <tr><td><strong>A</strong></td><td>orders.csv</td><td>ordered_qty, backlog, returns</td><td>Multiplicative demand: trend × seasonality × PMI × events</td></tr>
+          <tr><td><strong>B</strong></td><td>production.csv</td><td>capacity_hours, utilisation, scrap</td><td>Quality-speed tradeoff: scrap increases at high utilisation</td></tr>
+          <tr><td><strong>C</strong></td><td>suppliers.csv</td><td>lead_time, reliability, rm_price</td><td>Lead time correlated with energy prices and holidays</td></tr>
+          <tr><td><strong>D</strong></td><td>externals.csv</td><td>PMI, energy_price, EUR/USD</td><td>PMI: sine wave. Energy: mean-reverting. FX: random walk</td></tr>
+          <tr><td><strong>E</strong></td><td>customers.csv</td><td>contract, promotion, launch</td><td>Promotions +35% demand, product launches +50%</td></tr>
+        </tbody>
+      </table>
+
+      <h3>5.2 Feature Engineering</h3>
+      <p>The 6 raw CSVs are merged into a single flat table and enriched with 70+ features.</p>
+      <div class="grid-3">
+        <div class="card blue">
+          <strong style="color:#1e40af;">Lag features</strong>
+          <p>ordered_qty_lag_1/2/4/8/13/26/52<br>backlog, utilisation, capacity lags</p>
+        </div>
+        <div class="card green">
+          <strong style="color:#065f46;">Rolling statistics</strong>
+          <p>mean/std over 4w and 12w windows<br>demand_momentum · trend_slope</p>
+        </div>
+        <div class="card purple">
+          <strong style="color:#4c1d95;">Derived features</strong>
+          <p>fill_rate · scrap_rate<br>supply_risk_score · week_sin/cos</p>
+        </div>
+      </div>
+      <div class="alert danger">
+        <strong>Data leakage prevention</strong>
+        <p>All rolling statistics use <code>shift(1)</code> before the window — the model never sees the current week's data when computing its features. Current-week variables (ordered_qty, backlog) are dropped; only their lagged versions are used.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. ML Model -->
+  <div class="section" id="ml">
+    <div class="section-header">🤖 6. ML Model (Notebook 03)</div>
+    <div class="section-body">
+      <h3>6.1 Algorithm: XGBoost</h3>
+      <p>XGBoost builds an ensemble of decision trees sequentially, where each tree corrects the errors of the previous ones. It was chosen because it handles mixed variable types naturally, is robust to outliers, learns feature interactions automatically, trains quickly, and is fully compatible with SHAP for explainability.</p>
+
+      <h3>6.2 Walk-Forward Validation</h3>
+      <div class="alert warning">
+        <strong>Why not a random train/test split?</strong>
+        <p>A random split in time series allows the model to train on week 80 and predict week 30 — impossible in production. Walk-forward validation simulates real deployment: train on all past data, predict one week ahead, expand, repeat.</p>
+      </div>
+      <pre><span class="green">Fold 1:  Train [weeks 0-39]  → Predict week 40
+Fold 2:  Train [weeks 0-40]  → Predict week 41
+Fold 3:  Train [weeks 0-41]  → Predict week 42
+...
+Fold N:  Train [weeks 0-T-1] → Predict week T
+Final metrics = average across all folds</span></pre>
+
+      <h3>6.3 Hyperparameters</h3>
+      <table>
+        <thead><tr><th>Parameter</th><th>Value</th><th>Rationale</th></tr></thead>
+        <tbody>
+          <tr><td>n_estimators</td><td>300</td><td>Enough trees to capture complex patterns</td></tr>
+          <tr><td>max_depth</td><td>5</td><td>Moderate depth — learns interactions without overfitting</td></tr>
+          <tr><td>learning_rate</td><td>0.05</td><td>Small steps — forces gradual improvement</td></tr>
+          <tr><td>subsample</td><td>0.8</td><td>80% of rows per tree — adds randomness</td></tr>
+          <tr><td>colsample_bytree</td><td>0.8</td><td>80% of features per tree — prevents dominance</td></tr>
+          <tr><td>reg_alpha / reg_lambda</td><td>0.1 / 1.0</td><td>L1 + L2 regularisation to control complexity</td></tr>
+        </tbody>
+      </table>
+
+      <h3>6.4 Performance Metrics</h3>
+      <div class="grid-3">
+        <div class="card blue" style="text-align:center;">
+          <strong style="color:#1e40af;font-size:1.1em;">MAPE</strong>
+          <p>Mean Absolute % Error. Easy to explain to business: "off by X% on average"</p>
+        </div>
+        <div class="card green" style="text-align:center;">
+          <strong style="color:#065f46;font-size:1.1em;">RMSE</strong>
+          <p>Root Mean Squared Error. Penalises large errors more than small ones</p>
+        </div>
+        <div class="card amber" style="text-align:center;">
+          <strong style="color:#92400e;font-size:1.1em;">Bias</strong>
+          <p>Signed mean error. Positive = overestimates. Negative = underestimates</p>
+        </div>
+      </div>
+
+      <h3>6.5 SHAP Explainability</h3>
+      <p>SHAP (SHapley Additive exPlanations) assigns each feature a contribution value for every individual prediction. Unlike global feature importance, SHAP explains why the model predicted a specific value for a specific product in a specific week — transforming XGBoost from a black box into a fully interpretable system that supply chain managers can trust and act on.</p>
+    </div>
+  </div>
+
+  <!-- 7. FastAPI -->
+  <div class="section" id="api">
+    <div class="section-header">⚡ 7. FastAPI Backend (Notebook 04)</div>
+    <div class="section-body">
+      <p>The FastAPI backend exposes the XGBoost model as a REST API. Routers handle HTTP concerns, the predictor service handles all ML logic, and Pydantic models define strict data contracts.</p>
+
+      <h3>API Endpoints</h3>
+      <table>
+        <thead><tr><th>Method</th><th>Endpoint</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><span class="method get">GET</span></td><td><code>/</code></td><td>Health check — confirms model is loaded</td></tr>
+          <tr><td><span class="method get">GET</span></td><td><code>/forecast/latest</code></td><td>Predictions for all 10 products using latest data</td></tr>
+          <tr><td><span class="method get">GET</span></td><td><code>/forecast/{product_id}</code></td><td>Prediction for one specific product</td></tr>
+          <tr><td><span class="method post">POST</span></td><td><code>/forecast/single</code></td><td>Custom prediction from provided feature dict (what-if analysis)</td></tr>
+          <tr><td><span class="method post">POST</span></td><td><code>/forecast/batch</code></td><td>Multiple predictions in a single API call</td></tr>
+          <tr><td><span class="method get">GET</span></td><td><code>/forecast/shap/{product_id}</code></td><td>SHAP explanation for latest prediction</td></tr>
+          <tr><td><span class="method get">GET</span></td><td><code>/alerts</code></td><td>Active alerts with optional ?severity=HIGH filter</td></tr>
+          <tr><td><span class="method get">GET</span></td><td><code>/alerts/summary</code></td><td>Alert counts by type and severity</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Alert Logic</h3>
+      <div class="grid-3">
+        <div class="card amber">
+          <strong style="color:#c2410c;">🔺 DEMAND_SPIKE</strong>
+          <p>Predicted demand > 130% of recent average. Action: increase production order or draw from safety stock.</p>
+        </div>
+        <div class="card blue">
+          <strong style="color:#1d4ed8;">🔻 DEMAND_DROP</strong>
+          <p>Predicted demand &lt; 70% of recent average. Action: reduce production order to avoid overstock.</p>
+        </div>
+        <div class="card red">
+          <strong style="color:#b91c1c;">⚠️ SUPPLY_RISK</strong>
+          <p>Supply risk score > 0.6 with sustained demand. Action: contact supplier proactively.</p>
+        </div>
+      </div>
+
+      <h3>Key Design Patterns</h3>
+      <p><strong>Singleton model loading:</strong> the XGBoost model is loaded once at startup via FastAPI's lifespan context manager. This reduces response time from ~1s to ~1ms per request.</p>
+      <p><strong>Pydantic validation:</strong> every request and response has a typed schema. Invalid data is automatically rejected with a clear error message — no manual validation code needed.</p>
+      <p><strong>CORS middleware:</strong> configured to allow the React frontend on localhost:3000 to call the API from the browser.</p>
+    </div>
+  </div>
+
+  <!-- 8. React -->
+  <div class="section" id="frontend">
+    <div class="section-header">⚛️ 8. React Dashboard (Notebook 05)</div>
+    <div class="section-body">
+      <p>Built with Vite for fast development, Recharts for data visualisation, and plain CSS for styling. Fetches all data from FastAPI on load and updates when the user clicks Refresh.</p>
+
+      <table>
+        <thead><tr><th>Component</th><th>Data source</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><code>App.jsx</code></td><td>All endpoints</td><td>Root component — fetches data, manages state, shows API connection status</td></tr>
+          <tr><td><code>KPICards.jsx</code></td><td>/forecast/latest + /alerts/summary</td><td>4 metric cards: products monitored, active alerts, avg demand, highest variance</td></tr>
+          <tr><td><code>ForecastChart.jsx</code></td><td>/forecast/latest</td><td>Bar chart — green if above avg, red if below, with hover tooltip</td></tr>
+          <tr><td><code>AlertsPanel.jsx</code></td><td>/alerts</td><td>Filterable list of active alerts with severity badges and recommended actions</td></tr>
+          <tr><td><code>ShapPanel.jsx</code></td><td>/forecast/shap/{id}</td><td>Horizontal bar chart of top SHAP contributions with product selector dropdown</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Data flow in React</h3>
+      <pre><span class="green">App.jsx (mounts)
+  → Promise.all([getLatestForecasts(), getAlerts(), getAlertsSummary()])
+  → setState(forecasts, alerts, summary)
+  → React re-renders all child components automatically
+
+User changes product in ShapPanel
+  → useEffect fires on [selectedProduct] change
+  → getShap(productId) → setShapData(data)
+  → Chart re-renders with new SHAP values</span></pre>
+    </div>
+  </div>
+
+  <!-- 9. Design Decisions -->
+  <div class="section" id="decisions">
+    <div class="section-header">🧠 9. Key Design Decisions</div>
+    <div class="section-body">
+
+      <div class="decision">
+        <div class="icon">🌳</div>
+        <div>
+          <strong>XGBoost over Prophet or LSTM</strong>
+          <p>Prophet handles seasonality well but is limited to univariate data. LSTM requires much more data and is harder to interpret. XGBoost handles 70+ mixed variables naturally, trains in seconds, and produces SHAP values — the best tradeoff between performance, speed, and explainability for this use case.</p>
+        </div>
+      </div>
+
+      <div class="decision">
+        <div class="icon">⏱️</div>
+        <div>
+          <strong>Walk-forward validation over random split</strong>
+          <p>A random split in time series data produces optimistic metrics that don't reflect production reality. Walk-forward validation simulates every Monday morning deployment — the only way to get honest performance estimates that match what the model will actually achieve when deployed.</p>
+        </div>
+      </div>
+
+      <div class="decision">
+        <div class="icon">✖️</div>
+        <div>
+          <strong>Multiplicative demand model</strong>
+          <p>Demand factors are multiplied together rather than added. A holiday during a peak season is worse than either alone; a promotion during an economic downturn has a dampened effect. Multiplicative models capture these compound effects naturally, producing more realistic synthetic data for the model to learn from.</p>
+        </div>
+      </div>
+
+      <div class="decision">
+        <div class="icon">🔍</div>
+        <div>
+          <strong>SHAP for explainability</strong>
+          <p>In supply chain, managers need to trust model predictions before acting on them. SHAP transforms XGBoost from a black box into a transparent system — every prediction comes with a ranked list of which variables drove it up or down, making the model auditable and actionable.</p>
+        </div>
+      </div>
+
+      <div class="decision">
+        <div class="icon">⚡</div>
+        <div>
+          <strong>Singleton model loading in FastAPI</strong>
+          <p>The XGBoost model is loaded once at API startup via FastAPI's lifespan context manager and shared across all requests. This reduces response time from ~1 second (loading from disk each time) to ~1 millisecond (inference only), making the API production-ready.</p>
+        </div>
+      </div>
+
+      <div class="decision">
+        <div class="icon">🛡️</div>
+        <div>
+          <strong>shift(1) before rolling windows</strong>
+          <p>All rolling statistics are computed on lagged data to prevent data leakage — one of the most common and damaging mistakes in time series ML. Without this, the model would see the current week's demand when computing its own features, producing artificially high training scores that collapse in production.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 10. Next Steps -->
+  <div class="section" id="nextsteps">
+    <div class="section-header">🚀 10. Next Steps & Extensions</div>
+    <div class="section-body">
+      <div class="grid-2">
+        <div class="card blue">
+          <strong style="color:#1e40af;">🗄️ PostgreSQL integration</strong>
+          <p>Replace CSV files with a proper database. SQLAlchemy + Alembic for schema migrations. Enables multi-user access, audit trails, and real-time data ingestion from ERP systems.</p>
+        </div>
+        <div class="card green">
+          <strong style="color:#065f46;">🧠 LSTM / Temporal Fusion Transformer</strong>
+          <p>Add a deep learning model alongside XGBoost and compare metrics. TFT is the current state-of-the-art for multivariate time series forecasting with mixed variable types.</p>
+        </div>
+        <div class="card purple">
+          <strong style="color:#4c1d95;">🐳 Docker + cloud deployment</strong>
+          <p>Containerise the FastAPI backend with Docker. Deploy to AWS/Azure/GCP. Add a CI/CD pipeline with GitHub Actions for automated model retraining when new data arrives.</p>
+        </div>
+        <div class="card amber">
+          <strong style="color:#92400e;">🔧 Hyperparameter tuning</strong>
+          <p>Use Optuna for Bayesian optimisation of XGBoost hyperparameters. Add cross-validation within each walk-forward fold for more robust and statistically sound estimates.</p>
+        </div>
+        <div class="card red">
+          <strong style="color:#b91c1c;">📊 Real ERP data</strong>
+          <p>Connect to real ERP systems (SAP, Oracle) via API. Add a data validation pipeline to handle missing values, outliers, schema changes, and delayed reporting.</p>
+        </div>
+        <div class="card cyan">
+          <strong style="color:#0e7490;">📧 Automated reporting</strong>
+          <p>Weekly email/Slack digest of forecasts and alerts. Scheduled retraining pipeline. Model drift detection that triggers retraining when prediction errors increase over time.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <h2>Supply Chain Planning System</h2>
+    <p>End-to-end ML pipeline · Manufacturing sector · 5 notebooks</p>
+    <div class="tags">
+      <span>📦 Notebook 01 — Data generation</span>
+      <span>⚙️ Notebook 02 — Feature engineering</span>
+      <span>🤖 Notebook 03 — XGBoost + SHAP</span>
+      <span>🚀 Notebook 04 — FastAPI</span>
+      <span>⚛️ Notebook 05 — React dashboard</span>
+    </div>
+  </footer>
+
+</main>
+
+<script>
+  // Highlight active nav link on scroll
+  const sections = document.querySelectorAll('.section');
+  const navLinks = document.querySelectorAll('nav a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 60) current = s.id;
+    });
+    navLinks.forEach(a => {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    });
+  });
+</script>
+</body>
+</html>
