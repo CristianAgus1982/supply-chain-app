@@ -1,0 +1,72 @@
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+       background: #f1f5f9; color: #1e293b; }
+.header { background: linear-gradient(135deg,#1e293b,#334155); color:white;
+          padding:16px 24px; display:flex; justify-content:space-between;
+          align-items:center; box-shadow:0 2px 8px rgba(0,0,0,.2); }
+.header-left h1 { font-size:1.25rem; font-weight:700; }
+.header-left p  { color:#94a3b8; font-size:.85rem; margin-top:2px; }
+.header-right   { display:flex; align-items:center; gap:12px; }
+.status { display:flex; align-items:center; gap:6px; font-size:.82rem; color:#94a3b8; }
+.dot { width:8px; height:8px; border-radius:50%; }
+.dot.ok      { background:#4ade80; }
+.dot.error   { background:#f87171; }
+.dot.loading { background:#fbbf24; animation:pulse 1s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+.btn { background:#475569; color:white; border:none; padding:6px 14px;
+       border-radius:8px; cursor:pointer; font-size:.82rem; }
+.btn:hover { background:#64748b; }
+.error-banner { background:#fef2f2; border-bottom:1px solid #fecaca;
+                color:#dc2626; text-align:center; padding:10px; font-size:.88rem; }
+.main { max-width:1280px; margin:0 auto; padding:28px 24px; }
+.kpi-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:18px; margin-bottom:28px; }
+@media(max-width:1024px){.kpi-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:600px) {.kpi-grid{grid-template-columns:1fr;}}
+.kpi-card { background:white; border-radius:12px;
+            box-shadow:0 1px 4px rgba(0,0,0,.07); padding:20px;
+            display:flex; gap:14px; align-items:flex-start; }
+.kpi-icon { padding:10px; border-radius:10px; flex-shrink:0; }
+.kpi-icon.blue   { background:#3b82f6; }
+.kpi-icon.red    { background:#ef4444; }
+.kpi-icon.green  { background:#10b981; }
+.kpi-icon.orange { background:#f97316; }
+.kpi-label { font-size:.78rem; color:#64748b; font-weight:500; text-transform:uppercase;
+             letter-spacing:.03em; }
+.kpi-value { font-size:1.8rem; font-weight:700; color:#0f172a; margin:4px 0 2px; }
+.kpi-sub   { font-size:.75rem; color:#94a3b8; }
+.card { background:white; border-radius:12px;
+        box-shadow:0 1px 4px rgba(0,0,0,.07); padding:24px; margin-bottom:22px; }
+.card-title { font-size:1rem; font-weight:700; color:#0f172a; margin-bottom:2px; }
+.card-sub   { font-size:.82rem; color:#94a3b8; margin-bottom:16px; }
+.card-header { display:flex; justify-content:space-between; align-items:center;
+               margin-bottom:16px; flex-wrap:wrap; gap:8px; }
+.bottom-grid { display:grid; grid-template-columns:1fr 1fr; gap:22px; }
+@media(max-width:900px){.bottom-grid{grid-template-columns:1fr;}}
+.filters { display:flex; gap:6px; }
+.filter-btn { padding:4px 12px; border-radius:20px; border:none; cursor:pointer;
+              font-size:.78rem; font-weight:600; background:#f1f5f9; color:#475569; }
+.filter-btn.active { background:#3b82f6; color:white; }
+.alert-list { display:flex; flex-direction:column; gap:10px;
+              max-height:400px; overflow-y:auto; }
+.alert-row  { border-radius:10px; padding:14px 16px; display:flex;
+              gap:12px; align-items:flex-start; }
+.alert-row.DEMAND_SPIKE { background:#fff7ed; }
+.alert-row.DEMAND_DROP  { background:#eff6ff; }
+.alert-row.SUPPLY_RISK  { background:#fef2f2; }
+.alert-body { flex:1; min-width:0; }
+.alert-title-row { display:flex; align-items:center; gap:6px; flex-wrap:wrap;
+                   font-weight:600; font-size:.88rem; }
+.badge { font-size:.7rem; padding:2px 8px; border-radius:20px; font-weight:700; }
+.badge.DEMAND_SPIKE { background:#fed7aa; color:#c2410c; }
+.badge.DEMAND_DROP  { background:#dbeafe; color:#1d4ed8; }
+.badge.SUPPLY_RISK  { background:#fecaca; color:#b91c1c; }
+.badge.HIGH   { background:#ef4444; color:white; }
+.badge.MEDIUM { background:#f59e0b; color:white; }
+.alert-detail { font-size:.8rem; color:#475569; margin-top:5px; }
+.alert-action { font-size:.75rem; color:#94a3b8; margin-top:3px; font-style:italic; }
+.shap-select { border:1px solid #e2e8f0; border-radius:8px; padding:6px 12px;
+               font-size:.85rem; color:#1e293b; background:white; cursor:pointer; }
+.shap-meta { font-size:.83rem; color:#475569; margin-bottom:14px; }
+.shap-meta strong { color:#0f172a; }
+.empty { text-align:center; color:#94a3b8; padding:48px 0; font-size:.9rem; }

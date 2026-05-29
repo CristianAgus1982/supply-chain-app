@@ -1,0 +1,19 @@
+﻿# Python
+__pycache__/
+*.pyc
+*.pkl
+.env
+
+# Data (too large for GitHub)
+data/raw/
+data/processed/
+
+# Node
+node_modules/
+frontend/dist/
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# Conda
+*.egg-info/
