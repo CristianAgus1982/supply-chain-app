@@ -52,7 +52,7 @@ export default function ShapPanel({ productIds }) {
               margin={{top:4,right:20,left:110,bottom:4}}>
               <CartesianGrid strokeDasharray="3 3" stroke="#f0f4f8" />
               <XAxis type="number" tick={{fontSize:11}} />
-              <YAxis type="category" dataKey="name" tick={{fontSize:10}} width={105} />
+              <YAxis type="category" dataKey="name" tick={{fontSize:10}} width:={105} />
               <Tooltip formatter={v => [`${v>0?"+":""}${v}`,"SHAP"]} />
               <ReferenceLine x={0} stroke="#94a3b8" />
               <Bar dataKey="shap" radius={[0,4,4,0]}>
